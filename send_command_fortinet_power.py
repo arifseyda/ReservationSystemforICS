@@ -2,11 +2,7 @@ from netmiko import ConnectHandler
 import veritabanı
 
 fortinet = {
-    "host": "SAUTYM_ENERGYIT",
-    "device_type": "fortinet",
-    "ip": "192.168.1.99",
-    "username": "ozcelik",
-    "password": "Smntc15*s"
+    "your fortinet information"
 
 }
 
@@ -25,7 +21,7 @@ def create_ldap_user():
         config_commands = ["config user local",
                            "edit '{}'".format(user_array[i]),
                            "set type ldap",
-                           'set ldap-server SiberLab',
+                           'set ldap-server your "ldap server name"',
                            "end"]
         output = net_connect.send_config_set(config_commands)
         print(output)
