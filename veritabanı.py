@@ -1,7 +1,7 @@
 import sqlite3
 import datetime
 
-con = sqlite3.connect(r"C:\Users\arifseyda\Desktop\rezervasyon_sistemi\db.sqlite3")
+con = sqlite3.connect(r"your sqlite directory")
 cursor = con.cursor()
 
 def verileri_al():
