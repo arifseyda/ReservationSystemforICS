@@ -3,15 +3,15 @@ import datetime
 import veritabanı
 
 
-ad_server_ip = "192.168.100.46"
-ad_bot_port = 19961
+ad_server_ip = ""
+ad_bot_port = 
 domain_controller = "DC=siberlab, DC=local"
-users_ou = 'OU=Siberlab, {}'.format(domain_controller)
+users_ou = 'OU=, {}'.format(domain_controller)
 
 
 def send_command(command):
     try:
-        connection = rpyc.connect('192.168.100.46', 19961)
+        connection = rpyc.connect('', )
         connection.root.run_command(command)
     except Exception as Err:
         print('Error in send command', str(Err))
