@@ -1,0 +1,827 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block body %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalendarPickerJS</title>
+    <link rel="stylesheet" href="{% static './css/CalendarPicker.style.css' %}">
+    <style>
+
+        #myCalendarWrapper {
+            width: 40em;
+            border: 1px dashed black;
+            padding: 2em 4em;
+            position: relative;
+            font-size: 1rem;
+            margin: 2rem auto 5rem;
+        }
+
+        #myCalendarWrapper:before {
+
+            position: absolute;
+            font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, 2.4rem);
+            font-size: 1.2rem;
+            background-color: rgba(93, 93, 93, 0.2);
+            padding: 0.5rem 1rem 0.4rem;
+            color: rgb(233, 72, 99);
+        }
+
+        .center {
+            margin: auto;
+            width: 70%;
+            padding: 10px;
+        }
+        .center2 {
+            margin: auto;
+            width: 26.5%;
+            padding: 10px;
+        }
+
+    </style>
+</head>
+{% load crispy_forms_tags %}
+    <section class="hero-wrap hero-wrap-2"  style="background-image: url({% static 'images/sunucu.jpg' %});" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-center">
+          <div class="col-md-9 ftco-animate text-center mb-4">
+            <h1 class="mb-2 bread">Book a Table</h1>
+            <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'index'  %}">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Reservation <i class="ion-ios-arrow-forward"></i></span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+		<br><br>
+
+
+
+
+<div class="col-md-6 offset-md-3">
+<h3>Rezervasyon Yap</h3>
+    <hr>
+
+<div id="showcase-wrapper">
+        <div id="myCalendarWrapper"></div>
+        <div id="example">
+
+                <p hidden id="current-datestring"></p>
+
+        </div>
+    </div>
+    <!-- END section -->
+
+</div>
+
+<div class="center2">
+<input type="checkbox" id="Elektrik" name="Elektrik" value="Elektrik" onclick="GenerateTable()" />
+        <label for="Elektrik">Elektrik boş saatleri görebilmek için tıklayınız</label><br>
+
+        <input type="checkbox"  id="Su" name="Su" value="Su" onclick="GenerateTable2()" />
+    <label for="Su">Su boş saatleri görebilmek için tıklayınız</label><br>
+<!--
+        <input type="checkbox" id="Blade" name="Blade" value="Blade" onclick="GenerateTable3()" />
+    <label for="Blade">Blade boş saatleri görebilmek için tıklayınız</label><br>
+-->
+
+    <button type="submit" onclick="deneme()">Submit form</button>
+</div>
+
+<div id="dvTable" class="center" >
+    <br>
+</div>
+
+
+<div id="dvTable2" class="center" >
+    <br>
+</div>
+
+<!--
+<div id="dvTable3" class="center" >
+    <br>
+</div>
+-->
+<!--
+<div class="center2">
+<input type="button" value="Elektrik Sistemindeki boş saatleri görebilmek için butona tıklayınız..." onclick="GenerateTable()" />
+        <br><br></div>
+
+<div id="dvTable" class="center" ></div>
+ <br>
+<div class="center2">
+ <input type="button" value="Su Sistemindeki boş saatleri görebilmek için butona tıklayınız..." onclick="GenerateTable2()" />
+
+ <br><br></div>
+<div id="dvTable2" class="center" ></div>
+<br>
+
+<div class="center2">
+<input type="button" value="Blade Suncusundaki boş saatleri görebilmek için butona tıklayınız..." onclick="GenerateTable3()" />
+        <br><br></div>
+
+<div id="dvTable3" class="center" ></div>
+ <br>-->
+
+
+
+<div class="col-md-6 offset-md-3">
+
+
+    <form method="post" id="post-form">
+    {% csrf_token %}
+
+
+        <br>
+    {{reserve_form|crispy}}
+        <!--{% for reservation in rezervasyon_list %}
+
+        <p>{{reservation.reserved_start_time}}</p>
+        {% endfor %}-->
+
+<br>
+    <button type="submit" class="btn btn-danger">Rezervasyon Yaptır</button>
+</form>
+<br>
+</div>
+
+
+<script src="{% static 'js/CalendarPicker.js' %}"></script>
+
+<script type="text/javascript">
+
+
+Date.prototype.toTurkishFormatDate = function(format) {
+    var date = this,
+            day = date.getDate(),
+            weekDay = date.getDay(),
+            month = date.getMonth() + 1,
+            year = date.getFullYear(),
+            hours = date.getHours(),
+            minutes = date.getMinutes(),
+            seconds = date.getSeconds();
+
+    var monthNames = new Array("Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık");
+    var dayNames = new Array("Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi");
+
+    if (!format) {
+        format = "yyyy-mm-dd";
+    }
+
+
+    format = format.replace("mm", month.toString().padStart (2, "0"));
+
+    format = format.replace("MM", monthNames[month]);
+
+    if (format.indexOf("yyyy") > -1) {
+        format = format.replace("yyyy", year.toString());
+    } else if (format.indexOf("yy") > -1) {
+        format = format.replace("yy", year.toString().substr(2, 2));
+    }
+
+    format = format.replace("dd", day.toString().padStart (2, "0"));
+
+    format = format.replace("DD", dayNames[weekDay]);
+
+    if (format.indexOf("HH") > -1) {
+        format = format.replace("HH", hours.toString().replace(/^(\d)$/, '0$1'));
+    }
+
+    if (format.indexOf("hh") > -1) {
+        if (hours > 12) {
+            hours -= 12;
+        }
+
+        if (hours === 0) {
+            hours = 12;
+        }
+        format = format.replace("hh", hours.toString().replace(/^(\d)$/, '0$1'));
+    }
+
+    if (format.indexOf("ii") > -1) {
+        format = format.replace("ii", minutes.toString().replace(/^(\d)$/, '0$1'));
+    }
+
+    if (format.indexOf("ss") > -1) {
+        format = format.replace("ss", seconds.toString().replace(/^(\d)$/, '0$1'));
+    }
+
+    return format;
+};
+
+
+    const nextYear = new Date().getFullYear() + 1;
+    const myCalender = new CalendarPicker('#myCalendarWrapper', {
+        // If max < min or min > max then the only available day will be today.
+        min: new Date(),
+        max: new Date(nextYear, 10) // NOTE: new Date(nextYear, 10) is "Sun Nov 01 <nextYear>"
+    });
+
+    const currentToDate = document.getElementById('current-datestring');
+    currentToDate.textContent = myCalender.value.toTurkishFormatDate();
+
+
+    myCalender.onValueChange((currentValue) => {
+
+        currentToDate.textContent = currentValue.toTurkishFormatDate();
+
+    });
+
+    function deneme(){
+
+
+    var elektrik = document.getElementById("Elektrik");
+    var su = document.getElementById("Su");
+    var blade = document.getElementById("Blade");
+
+
+    if(elektrik.checked){
+        elektrik.checked = false;
+    }
+    if(su.checked){
+        su.checked = false;
+    }
+    if(blade.checked){
+        blade.checked = false;
+    }
+
+
+}
+</script>
+
+
+
+<script type="text/javascript">
+
+
+function changeTextTwo(){
+
+var takvim2 = ""
+takvim2 = currentToDate.textContent;
+
+var hepsi = "{{rezervasyon_list}}"
+
+//Query den sadece tarihleri alma işlemi
+var i;
+var text = "";
+var ilk_tarih = 40;
+var ikinci_tarih = 62;
+var yedek_ikinci = 62;
+
+for( i = 31; i < hepsi.length; i++){
+if(i <= ilk_tarih){
+    text += hepsi[i]
+    if(i == ilk_tarih){
+
+        yedek_ikinci += 33;
+
+    }
+}
+
+else if(i > ilk_tarih && i <= ikinci_tarih){
+    if (i == ikinci_tarih){
+        ilk_tarih += 33;
+        ikinci_tarih = yedek_ikinci;
+    }
+    continue;
+}
+}
+
+//Veritabanından gelen verilerin bir diziye atılması
+var y;
+var text2 = "";
+var onemli_tarih = 9;
+var tarih_dizisi = [];
+// boşluk 4 sayılıyor
+for (y = 0; y < text.length; y++){
+    if(y <= onemli_tarih){
+        text2 += text[y]
+        if (y == onemli_tarih){
+            tarih_dizisi.push(text2);
+            text2 = "";
+            onemli_tarih += 11;
+        }
+    }
+
+}
+
+
+//Takvimden gelen tarih ile kayıt olan tarihin karşılaştırılması
+var j;
+var text3 = [];
+
+for(j = 0; j < tarih_dizisi.length; j++){
+    if(tarih_dizisi[j][0] == ' '){
+        tarih_dizisi[j] = tarih_dizisi[j].trim();
+    }
+
+    if(tarih_dizisi[j] == takvim2){
+        text3.push("true");
+    }
+    else{
+         text3.push("false");
+    }
+}
+
+
+
+// tarih başlangıc zamanı ve son zamanını bir dizeye atmak
+var baslangic_zaman = [];
+baslangic_zaman = create_start();
+var son_zaman = [];
+son_zaman = create_end();
+var tarih_zaman = [];
+var durum_bilgisi = [];
+durum_bilgisi = status();
+
+for(var k = 0; k < tarih_dizisi.length; k++){
+    if(tarih_dizisi[k][0] == ' '){
+        tarih_dizisi[k] = tarih_dizisi[k].trim();
+    }
+    tarih_zaman.push(tarih_dizisi[k]);
+    tarih_zaman.push(text3[k]);
+    tarih_zaman.push(baslangic_zaman[k]);
+    tarih_zaman.push(son_zaman[k]);
+    tarih_zaman.push(durum_bilgisi[k]);
+
+}
+
+  return tarih_zaman;
+
+//document.getElementById('boldStuff').innerHTML = tarih_zaman;
+
+}
+
+function status(){
+var hepsi4 = "{{rezervasyon_list4}}"
+var sayi = 35;
+var sayi2 = 59;
+var sayi3 = 59;
+var text = "";
+for(var i = 35; i <= hepsi4.length; i++){
+    if(i <= sayi){
+        text += hepsi4[i];
+        if(i == sayi){
+            sayi3 += 25;
+
+        }
+    }
+    else if(i > sayi && i <= sayi2){
+        if (i == sayi2){
+            sayi += 25;
+            sayi2 = sayi3;
+
+        }
+    continue;
+    }
+
+}
+
+
+var text2 = "";
+var onemli_tarih = 0;
+var durum_dizisi = [];
+
+for (var y = 0; y < text.length; y++){
+    if(y <= onemli_tarih){
+        text2 += text[y]
+        if (y == onemli_tarih){
+            durum_dizisi.push(text2);
+            text2 = "";
+            onemli_tarih += 1;
+        }
+    }
+
+}
+return durum_dizisi;
+
+//document.getElementById('boldStuff').innerHTML = durum_dizisi;
+}
+
+function create_start(){
+
+var hepsi2 = "{{rezervasyon_list2}}"
+var sayi = 63;
+var sayi2 = 118;
+var sayi3 = 118;
+var text = "";
+for(var i = 62; i <= hepsi2.length; i++){
+    if(i <= sayi){
+        text += hepsi2[i];
+
+        if(i == sayi){
+            text += " ";
+   			if(text.includes(",")){
+            	text = text.replace(',','0');
+            	sayi = sayi - 1
+        		sayi2 = sayi2- 1
+            	sayi3= sayi3 - 1
+            	if(text.includes("00")){
+            	 	text = text.replace('00','00 ')
+            	}
+            	if(text.includes("10")){
+            	 	text = text.replace('10','01 ')
+            	}
+                if(text.includes("20")){
+            	 	text = text.replace('20','02 ')
+            	}
+            	if(text.includes("30")){
+            	 	text = text.replace('30','03 ')
+            	}
+                if(text.includes("40")){
+            	 	text = text.replace('40','04 ')
+           	 	}
+           	 	if(text.includes("50")){
+            	 	text = text.replace('50','05 ')
+            	}
+            	if(text.includes("60")){
+            	 	text = text.replace('60','06 ')
+            	}
+            	if(text.includes("70")){
+            	 	text = text.replace('70','07 ')
+            	}
+            	if(text.includes("80")){
+            	 	text = text.replace('80','08 ')
+            	}
+                if(text.includes("90")){
+            	 	text = text.replace('90','09 ')
+           	 	}
+        }
+            sayi3 += 57;
+        }
+    }
+    else if(i > sayi && i <= sayi2){
+    if (i == sayi2){
+        sayi += 57;
+        sayi2 = sayi3;
+    }
+    continue;
+    }
+}
+
+for( var j = 0; j <= text.length; j++){
+	if(text.includes(" ")){
+    	text = text.replace(' ','');
+    }
+}
+
+var text2 = "";
+var onemli_tarih = 1;
+var zaman_dizisi = [];
+// boşluk 4 sayılıyor
+for (var y = 0; y < text.length; y++){
+    if(y <= onemli_tarih){
+        text2 += text[y]
+        if (y == onemli_tarih){
+            zaman_dizisi.push(text2);
+            text2 = "";
+            onemli_tarih += 2;
+        }
+    }
+
+}
+return zaman_dizisi;
+//document.getElementById('boldStuff2').innerHTML = zaman_dizisi;
+
+}
+
+
+function create_end(){
+
+var hepsi3 = "{{rezervasyon_list3}}"
+var sayi = 61;
+var sayi2 = 114;
+var sayi3 = 114;
+var text = "";
+for(var i = 60; i <= hepsi3.length; i++){
+    if(i <= sayi){
+        text += hepsi3[i];
+        if(i == sayi){
+        text += " ";
+   			if(text.includes(",")){
+            	text = text.replace(',','0');
+            	sayi = sayi - 1
+        		sayi2 = sayi2- 1
+            	sayi3= sayi3 - 1
+            	if(text.includes("00")){
+            	 	text = text.replace('00','00 ')
+            	}
+            	if(text.includes("10")){
+            	 	text = text.replace('10','01 ')
+            	}
+                if(text.includes("20")){
+            	 	text = text.replace('20','02 ')
+            	}
+            	if(text.includes("30")){
+            	 	text = text.replace('30','03 ')
+            	}
+                if(text.includes("40")){
+            	 	text = text.replace('40','04 ')
+           	 	}
+           	 	if(text.includes("50")){
+            	 	text = text.replace('50','05 ')
+            	}
+            	if(text.includes("60")){
+            	 	text = text.replace('60','06 ')
+            	}
+            	if(text.includes("70")){
+            	 	text = text.replace('70','07 ')
+            	}
+            	if(text.includes("80")){
+            	 	text = text.replace('80','08 ')
+            	}
+                if(text.includes("90")){
+            	 	text = text.replace('90','09 ')
+           	 	}
+        }
+        sayi3 += 55;
+
+        }
+    }
+    else if(i > sayi && i <= sayi2){
+        if (i == sayi2){
+            sayi += 55;
+            sayi2 = sayi3;
+        }
+    continue;
+    }
+
+}
+
+for( var j = 0; j <= text.length; j++){
+	if(text.includes(" ")){
+    	text = text.replace(' ','');
+    }
+}
+
+var text2 = "";
+var onemli_tarih = 1;
+var son_zaman_dizisi = [];
+// boşluk 4 sayılıyor
+for (var y = 0; y < text.length; y++){
+    if(y <= onemli_tarih){
+        text2 += text[y]
+        if (y == onemli_tarih){
+            son_zaman_dizisi.push(text2);
+            text2 = "";
+            onemli_tarih += 2;
+        }
+    }
+
+}
+return son_zaman_dizisi;
+//document.getElementById('boldStuff3').innerHTML = text;
+}
+
+
+function GenerateTable() {
+
+        var tarih_zaman = [];
+        tarih_zaman = changeTextTwo();
+        var tarih = [];
+        var dog_yan = [];
+        var bas_zaman = [];
+        var son_zaman = [];
+        var durum = [];
+
+        for(var j = 0; j < tarih_zaman.length; j = j + 5){
+            tarih.push(tarih_zaman[j]);
+        }
+        for(var k = 1; k < tarih_zaman.length; k = k + 5){
+            dog_yan.push(tarih_zaman[k]);
+        }
+
+        for(var l = 2; l < tarih_zaman.length; l = l + 5){
+            bas_zaman.push(tarih_zaman[l]);
+        }
+        for(var m = 3; m < tarih_zaman.length; m = m + 5){
+            son_zaman.push(tarih_zaman[m]);
+        }
+        for(var m = 4; m < tarih_zaman.length; m = m + 5){
+            durum.push(tarih_zaman[m]);
+        }
+
+
+
+        //Create a HTML Table element.
+        var table = document.createElement("TABLE");
+        table.border = "1";
+
+        //Add the header row.
+        var row = table.insertRow(-1);
+        for (var i = 0; i < 24; i++) {
+            var headerCell = document.createElement("TH");
+            headerCell.style.width = "55px";
+            for(var x = 0; x < tarih.length; x++){
+                if(durum[x] == 0){
+                    if( i < 10) {
+                        donusturme = "0" + i;
+                        if (dog_yan[x] == "true" && bas_zaman[x] <= donusturme && son_zaman[x] > donusturme){
+                            headerCell.setAttribute("bgcolor","red");
+                        }
+                        else {
+                            continue;
+                        }
+
+                    }
+                    else if (i >= 10){
+                        if (dog_yan[x] == "true" && bas_zaman[x] <= i && son_zaman[x] > i){
+                            headerCell.setAttribute("bgcolor","red");
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+                }
+            }
+            if (i < 10 ){
+                headerCell.innerHTML = "0" + i + ":00";
+            }
+            else {
+                headerCell.innerHTML = i + ":00";
+            }
+
+            row.style.width = "2500px";
+            row.appendChild(headerCell);
+
+        }
+
+        var dvTable = document.getElementById("dvTable");
+        dvTable.innerHTML = "";
+        dvTable.appendChild(table);
+
+    }
+
+    function GenerateTable2() {
+
+        var tarih_zaman = [];
+        tarih_zaman = changeTextTwo();
+        var tarih = [];
+        var dog_yan = [];
+        var bas_zaman = [];
+        var son_zaman = [];
+        var durum = [];
+
+        for(var j = 0; j < tarih_zaman.length; j = j + 5){
+            tarih.push(tarih_zaman[j]);
+        }
+        for(var k = 1; k < tarih_zaman.length; k = k + 5){
+            dog_yan.push(tarih_zaman[k]);
+        }
+
+        for(var l = 2; l < tarih_zaman.length; l = l + 5){
+            bas_zaman.push(tarih_zaman[l]);
+        }
+        for(var m = 3; m < tarih_zaman.length; m = m + 5){
+            son_zaman.push(tarih_zaman[m]);
+        }
+        for(var m = 4; m < tarih_zaman.length; m = m + 5){
+            durum.push(tarih_zaman[m]);
+        }
+
+
+
+        //Create a HTML Table element.
+        var table = document.createElement("TABLE");
+        table.border = "1";
+
+        //Add the header row.
+        var row = table.insertRow(-1);
+        for (var i = 0; i < 24; i++) {
+            var headerCell = document.createElement("TH");
+            headerCell.style.width = "55px";
+            for(var x = 0; x < tarih.length; x++){
+                if(durum[x] == 1){
+                    if( i < 10) {
+                        donusturme = "0" + i;
+                        if (dog_yan[x] == "true" && bas_zaman[x] <= donusturme && son_zaman[x] > donusturme){
+                            headerCell.setAttribute("bgcolor","red");
+                        }
+                        else {
+                            continue;
+                        }
+
+                    }
+                    else if (i >= 10){
+                        if (dog_yan[x] == "true" && bas_zaman[x] <= i && son_zaman[x] > i){
+                            headerCell.setAttribute("bgcolor","red");
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+                }
+            }
+            if (i < 10 ){
+                headerCell.innerHTML = "0" + i + ":00";
+            }
+            else {
+                headerCell.innerHTML = i + ":00";
+            }
+
+            row.style.width = "2500px";
+            row.appendChild(headerCell);
+
+        }
+
+        var dvTable = document.getElementById("dvTable2");
+        dvTable.innerHTML = "";
+        dvTable.appendChild(table);
+
+    }
+
+
+    function GenerateTable3() {
+
+        var tarih_zaman = [];
+        tarih_zaman = changeTextTwo();
+        var tarih = [];
+        var dog_yan = [];
+        var bas_zaman = [];
+        var son_zaman = [];
+        var durum = [];
+
+        for(var j = 0; j < tarih_zaman.length; j = j + 5){
+            tarih.push(tarih_zaman[j]);
+        }
+        for(var k = 1; k < tarih_zaman.length; k = k + 5){
+            dog_yan.push(tarih_zaman[k]);
+        }
+
+        for(var l = 2; l < tarih_zaman.length; l = l + 5){
+            bas_zaman.push(tarih_zaman[l]);
+        }
+        for(var m = 3; m < tarih_zaman.length; m = m + 5){
+            son_zaman.push(tarih_zaman[m]);
+        }
+        for(var m = 4; m < tarih_zaman.length; m = m + 5){
+            durum.push(tarih_zaman[m]);
+        }
+
+
+
+        //Create a HTML Table element.
+        var table = document.createElement("TABLE");
+        table.border = "1";
+
+        //Add the header row.
+        var row = table.insertRow(-1);
+        for (var i = 0; i < 24; i++) {
+            var headerCell = document.createElement("TH");
+            headerCell.style.width = "55px";
+            for(var x = 0; x < tarih.length; x++){
+                if(durum[x] == 2){
+                    if( i < 10) {
+                        donusturme = "0" + i;
+                        if (dog_yan[x] == "true" && bas_zaman[x] <= donusturme && son_zaman[x] > donusturme){
+                            headerCell.setAttribute("bgcolor","red");
+                        }
+                        else {
+                            continue;
+                        }
+
+                    }
+                    else if (i >= 10){
+                        if (dog_yan[x] == "true" && bas_zaman[x] <= i && son_zaman[x] > i){
+                            headerCell.setAttribute("bgcolor","red");
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+                }
+            }
+            if (i < 10 ){
+                headerCell.innerHTML = "0" + i + ":00";
+            }
+            else {
+                headerCell.innerHTML = i + ":00";
+            }
+
+            row.style.width = "2500px";
+            row.appendChild(headerCell);
+
+        }
+
+        var dvTable = document.getElementById("dvTable3");
+        dvTable.innerHTML = "";
+        dvTable.appendChild(table);
+
+    }
+//changeTextTwo();
+//status();
+//changeTextTwo();
+//create_end();
+//create_start();
+</script>
+
+
+
+{% endblock body %}
+
